@@ -15,3 +15,17 @@ export const findAllTodos = async (env: Env) => {
 
     return results;
 }
+
+export const putTodo = async (env: Env, id: number, title?: string, completed?: number  ) => {
+    await env.todos
+        .prepare('UPDATE todos SET title = COALESCE(?, title), completed = COALESCE(?, completed) WHERE id = ?')
+        .bind(title, completed, id)
+        .run()
+}
+
+export const deleteTodoID = async (env: Env, id : number) => {
+    await env.todos
+        .prepare('DELETE FROM todos WHERE id = ?')
+        .bind(id)
+        .run()
+}
